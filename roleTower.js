@@ -34,7 +34,10 @@ module.exports = {
 
     // Priority 3: Attack any hostile
     const enemies = tower.room.find(FIND_HOSTILE_CREEPS, {
-      filter: (c) => c.owner.username != '_Invader' && ev(c) > 0
+      filter: (c) => (
+        (c.owner.username != '_Invader' && ev(c) > 0) ||
+        (c.hits < 100)
+      )
     }).sort((a,b) => ev(b) - ev(a));
     if(enemies.length > 0) {
       return tower.attack(enemies[Math.floor(Math.random() * Math.min(3, enemies.length))]);
