@@ -810,14 +810,9 @@ const role = {
   // REMOTE HARVESTER
   remote_harvester: (creep) => {
     const ctx = creep.memory;
-
-    if(ctx.affinityTime > 0) {
-      ctx.affinityTime--;
-    }
-
     const enemies = creep.room.find(FIND_HOSTILE_CREEPS);
 
-    if(enemies.length >= 2) {
+    if(enemies.length > 0) {
       return creep.moveTo(new RoomPosition(25, 25, ctx.home), {reusePath:30});
     }
 
