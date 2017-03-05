@@ -758,31 +758,51 @@ const role = {
   // REMOTE COLLECTOR
   remote_collector: (creep) => {
     const ctx = creep.memory;
-    const myStorage = new RoomPosition(27, 12, 'W66S39');
-    const target = new RoomPosition(37, 41, 'W61S39');
-
     ctx.working = canWork(creep);
+    const arrived = (ctx.working) ? creep.pos.roomName == ctx.home : creep.pos.roomName == ctx.duty;
 
     if(ctx.tooOld == true && creep.ticksToLive > 1300) {
       ctx.tooOld = false;
     }
 
+    if(!arrived) {
+      const target = (ctx.working) ? new RoomPosition(25, 25, ctx.home) : new RoomPosition(25, 25, ctx.duty)
+      return creep.moveTo(target, {reusePath:50});
+    }
+
     if(ctx.working) {
-      if(creep.pos.isNearTo(myStorage)) {
-        return creep.transfer(creep.room.lookForAt(LOOK_STRUCTURES, myStorage)[0], RESOURCE_ENERGY);
-      } else {
-        return creep.moveTo(myStorage, {reusePath:50});
+      try {
+        const homeStorage = creep.room.find(FIND_MY_STRUCTURES, { filter: {structureType:STRUCTURE_STORAGE} })[0];
+        if(creep.pos.isNearTo(homeStorage)) {
+          return creep.transfer(homeStorage, RESOURCE_ENERGY);
+        } else {
+          return creep.moveTo(homeStorage, {reusePath:50});
+        }
+      } catch(e) {
+        creep.say("Storage?");
+        return ERR_INVALID_TARGET;
       }
     } else { // not working
       if(creep.ticksToLive < 250) {
         ctx.tooOld = true;
-        return creep.moveTo(myStorage, {reusePath:50});
+        return creep.moveTo(new RoomPosition(25, 25, ctx.home), {reusePath:50});
       }
 
-      if(creep.pos.isNearTo(target)) {
-        return creep.withdraw(creep.room.lookForAt(LOOK_STRUCTURES, target)[0], RESOURCE_ENERGY);
-      } else {
-        return creep.moveTo(target, {reusePath:50});
+      try {
+        const destStorage = creep.room.find(FIND_STRUCTURES, {
+          filter: (s) => {
+            _.some([STRUCTURE_STORAGE, STRUCTURE_CONTAINER], (t) => s.structureType == t)
+          }
+        })[0];
+
+        if(creep.pos.isNearTo(destStorage)) {
+          return creep.withdraw(destStorage, RESOURCE_ENERGY);
+        } else {
+          return creep.moveTo(destStorage, {reusePath:50});
+        }
+      } catch(e) {
+        creep.say("Storage?");
+        return ERR_INVALID_TARGET;
       }
     }
   },
@@ -801,21 +821,26 @@ const role = {
       return creep.moveTo(new RoomPosition(25, 25, ctx.home), {reusePath:30});
     }
 
-    const isOutside = creep.room.name != ctx.home;
-
     ctx.working = canWork(creep);
 
     if(ctx.working) {
-      if(isOutside) {
+      // Road, container maintenance
+      const buildTarget = findBuildTarget(creep);
+      if(buildTarget) {
+        ctx.target = buildTarget;
+        return doBuild(creep);
+      }
+
+      if(creep.room.name != ctx.home) {
         return creep.moveTo(new RoomPosition(25, 25, ctx.home), {reusePath:30});
       } else {
         return deliverToStorage(creep);
       }
     } else { // not working
-      if(isOutside) {
-        return harvest(creep);
+      if(creep.room.name != ctx.duty) {
+        return creep.moveTo(new RoomPosition(25, 25, ctx.duty));
       } else {
-        return creep.moveTo(new RoomPosition(25,25, ('W69S43')));
+        return harvest(creep);
       }
     }
   },
@@ -842,14 +867,14 @@ const role = {
     if(isOutside) {
       return reserve(creep);
     } else {
-      return creep.moveTo(new RoomPosition(25, 25, 'W66S38'), {reusePath:30});
+      return creep.moveTo(new RoomPosition(25, 25, ctx.duty), {reusePath:30});
     }
   },
 
   // SETTLER
   settler: (creep) => {
     const ctx = creep.memory;
-    let target = null; //new RoomPosition(25, 25, ctx.duty);
+    let target = null;
 
     ctx.working = canWork(creep);
 

@@ -25,6 +25,10 @@ module.exports = {
                   CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // + 600 = 950
     },
 
+    workplace: {
+
+    },
+
     keep: []
   },
 
@@ -55,6 +59,10 @@ module.exports = {
                   CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], // + 600 = 950
     },
 
+    workplace: {
+
+    },
+
     keep: [
         C.H, C.H, C.U, C.B, // Beginning
         C.B, C.B, C.B, // Tier 1
@@ -73,6 +81,10 @@ module.exports = {
       'warrior': [TOUGH,TOUGH,ATTACK,ATTACK,MOVE,MOVE,MOVE],
     },
 
+    workplace: {
+
+    },
+
     keep: []
   },
 
@@ -80,6 +92,10 @@ module.exports = {
   'HoyaHome2': {
     geneBank: {
       'wall_worker': [WORK,CARRY,MOVE],
+    },
+
+    workplace: {
+
     },
 
     keep: [C.WW]
@@ -105,11 +121,18 @@ module.exports = {
                   ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,'/', // +400  = 2900
                   ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,'/', // +400  = 3300
                   ATTACK,ATTACK,ATTACK,ATTACK,ATTACK],    // +400  = 3700
-      'remote_harvester': [WORK,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
-      'reserver': [MOVE,MOVE,MOVE,CLAIM,CLAIM],
+      'remote_harvester': [WORK,MOVE,CARRY,MOVE,'/',MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY],
+      'reserver': [MOVE,CLAIM],
     },
 
-    keep: [C.H,C.H,C.U,C.B,C.B,C.B,C.U,C.D,C.D,C.C]
+    workplace: {
+      'remote_harvester': ['W66S42','W65S42','W67S42','W65S41'],
+      'remote_collector': ['W66S42','W65S42','W67S42','W65S41'],
+      'reserver': ['W66S42','W65S42','W67S42','W65S41'],
+    },
+
+    keep: [[C.H,C.H,C.U,C.B,C.B,C.B,C.U,C.D,C.D,C.C],
+           [C.RH,C.RH,C.RH,C.RH, C.RH,C.RH,C.RH,C.RH]]
   },
 
   /*************************************************************************************/
@@ -132,11 +155,18 @@ module.exports = {
                   ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,'/', // +400  = 2900
                   ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,'/', // +400  = 3300
                   ATTACK,ATTACK,ATTACK,ATTACK,ATTACK],    // +400  = 3700
-      'remote_harvester': [WORK,MOVE,CARRY,MOVE,'/',MOVE,MOVE,CARRY,CARRY,'/',MOVE,MOVE,CARRY,CARRY],
+      'remote_harvester': [WORK,MOVE,CARRY,MOVE,'/',MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY],
       'reserver': [MOVE,CLAIM],
     },
 
-    keep: [C.H,C.H,C.U,C.B,C.B,C.U,C.B,C.D,C.C,C.D,C.RH,C.RV,C.RH]
+    workplace: {
+      'remote_harvester': ['W69S43'],
+      'remote_collector': ['W69S43'],
+      'reserver': ['W69S43'],
+    },
+
+    keep: [[C.H,C.H,C.U,C.B,C.B,C.U,C.B,C.D,C.C,C.D],
+           [C.RH,C.RH]]
   },
 
 }

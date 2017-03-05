@@ -28,8 +28,11 @@ function buildCreepDNA(gene, energyAvail) {
   return dna;
 }
 
-function spawnCreep(spawnName, role, dna) {
+function spawnCreep(spawnName, role, dna, options) {
   const spawn = Game.spawns[spawnName];
+  const duty = _.get(options, 'duty', spawn.room.name);
+  const home = _.get(options, 'home', spawn.room.name);
+  const serial = _.get(options, 'serial', Date.now());
 
   if(_.isArray(dna) && dna.length == 0) {
     return false;
@@ -47,12 +50,12 @@ function spawnCreep(spawnName, role, dna) {
     version: 3,
     role: role,
     birth: spawn.room.name,
-    home: spawn.room.name,
-    duty: spawn.room.name,
+    home: home,
+    duty: duty,
     working: false,
     state: 'idle',
   };
-  const name = spawn.createCreep(dna, role + Date.now(), initMemory);
+  const name = spawn.createCreep(dna, `(${spawnName})${role}${serial}`, initMemory);
   return name;
 }
 
@@ -69,31 +72,55 @@ module.exports = {
     }
 
     const geneBank = plan.geneBank;
-    const keep = _.clone(plan.keep);
+    let keepArray = _.clone(plan.keep);
+    if(!_.isArray(keepArray[0])) {
+      keepArray = [keepArray];
+    }
 
     const creepsCount = _.clone(Memory.room[spawn.room.name]['resident']);
     let curCreepCount = {};
 
     // Treat evaluation
     if(spawn.room.controller.safeMode == undefined && spawn.room.find(FIND_HOSTILE_CREEPS).length >= 3) {
-      keep.push('gatekeeper');
-      keep.push('deployer');
-      keep.push('deployer');
+      // Purge any non-mendatory spawns
+      keepArray = keepArray.slice(0,1);
+
+      // Append gatekeeper
+      keepArray[0].push('gatekeeper');
+      keepArray[0].push('deployer');
+      keepArray[0].push('deployer');
     }
 
+    const keep = _.flatten(keepArray);
+
     // Spawn a civilian
-    for(let role of keep) {
+    for(let i in keep) {
+      const role = keep[i];
       creepsCount[role] = creepsCount[role] || 0;
       creepsCount[role]--;
       curCreepCount[role] = (curCreepCount[role] || 0) + 1;
 
       if(creepsCount[role] < 0) {
         const dna = buildCreepDNA(geneBank[role], spawn.room.energyAvailable);
-        const name = spawnCreep(spawn.name, role, dna);
+        const workplaces = _.get(plan.workplace, `[${role}]`, [spawn.name]);
 
-        if(_.isString(name)) {
-          console.log(`Spawn: ${name} with DNA [${dna.join(',')}] (${curCreepCount[role]})`);
-          return name;
+        // Spawn absent creep
+        // Serial represent his workplace
+        // 100 is a safeguard, it must be terminated until than.
+        let serial = 0;
+        while(serial < 100) {
+          serial += 1;
+          const workplace = workplaces[serial % workplaces.length];
+          const options = {
+            duty: workplace,
+            serial: serial,
+          };
+          const name = spawnCreep(spawn.name, role, dna, options);
+
+          if(_.isString(name)) {
+            console.log(`Spawn: ${name} with DNA [${dna.join(',')}] (${curCreepCount[role]})`);
+            return name;
+          }
         }
       }
     }

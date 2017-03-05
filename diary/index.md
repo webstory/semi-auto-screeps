@@ -21,3 +21,4 @@ This list below is summary of *important* events.
  - [2017.03.01](2017-03/2017-03-01.md): War begin. Invaded by player.
  - [2017.03.03](2017-03/2017-03-03.md): Destroyed capital room.
  - [2017.03.04](2017-03/2017-03-04.md): Make Gatekeeper creep.
+ - [2017.03.05](2017-03/2017-03-05.md): Remote harvester creep now can go multiple rooms.
