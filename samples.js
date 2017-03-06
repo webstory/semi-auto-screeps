@@ -1,3 +1,8 @@
+/* Get ramaining GCL points */
+function getRemainingGCL() {
+  return Game.gcl.progressTotal - Game.gcl.progress;
+}
+
 /* Manual spawn logic */
 function manualSpawnLogicSamples() {
   const initMemory = {

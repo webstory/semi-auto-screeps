@@ -131,11 +131,10 @@ function harvest(creep) {
   const sources = creep.room.find(FIND_SOURCES, {
     filter: (s) => {
       return (
-        (creep.pos.getRangeTo(s) < 2 && creep.memory.affinityTime > 0)
-        ||
-        s.pos.findInRange(FIND_MY_CREEPS, 1, {
+        (creep.pos.getRangeTo(s) < 2 && creep.memory.affinityTime > 0) ||
+        (s.pos.findInRange(FIND_MY_CREEPS, 1, {
           filter: (c) => c.memory.role == 'harvester' && c.name != creep.name
-        }).length < 1
+        }).length < 1)
       );
     }
   });
@@ -918,7 +917,7 @@ const role = {
 
     // Step 4: Building my structures
     if(creep.room.find(FIND_MY_CONSTRUCTION_SITES).length >= 1) {
-      if(creep.carry[RESOURCE_ENERGY] <= 0) {
+      if(ctx.working == false) {
         return recharge(creep);
       } else {
         ctx.target = findBuildTarget(creep);

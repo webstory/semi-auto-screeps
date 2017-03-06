@@ -14,12 +14,12 @@ global.spawnSettler1 = () => {
     role: 'settler',
     birth: spawn.room.name,
     home: spawn.room.name,
-    duty: 'W69S42',
+    duty: 'W67S41',
     working: false,
     state: 'idle',
   };
 
-  return spawn.createCreep([WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY], 'settler'+Date.now(), initMemory);
+  return spawn.createCreep([WORK,CARRY,MOVE,MOVE,MOVE,CLAIM], 'settler'+Date.now(), initMemory);
 }
 
 global.spawnSettler2 = () => {
@@ -29,12 +29,12 @@ global.spawnSettler2 = () => {
     role: 'settler',
     birth: spawn.room.name,
     home: spawn.room.name,
-    duty: 'W69S42',
+    duty: 'W67S41',
     working: false,
     state: 'idle',
   };
 
-  return spawn.createCreep([WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY], 'settler'+Date.now(), initMemory);
+  return spawn.createCreep([WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE], 'settler'+Date.now(), initMemory);
 }
 
 global.spawnRemoteCollector = () => {
