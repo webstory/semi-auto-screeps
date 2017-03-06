@@ -200,7 +200,7 @@ module.exports = {
     },
 
     keep: [[C.H,C.H,C.U,C.B,C.D],//,C.U,C.D,C.C,C.D],
-           [C.RH,C.RH,C.RH,C.RH]]
+           [C.RH,C.RH]]
   },
 
 }

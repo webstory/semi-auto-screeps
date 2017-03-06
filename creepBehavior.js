@@ -139,7 +139,7 @@ function harvest(creep) {
     }
   });
 
-  const source = creep.pos.findClosestByRange(sources);
+  const source = creep.pos.findClosestByPath(sources);
 
   if(source) {
     ctx.target = source.id;
