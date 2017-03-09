@@ -1,3 +1,45 @@
+/* Set room defence level */
+function setDefenceLevel() {
+  return Memory.room['W66S39'].defenceLevel = 0;
+}
+
+function spawnSpecialCreeps() {
+  // Special spawn logic
+  if(false && Game.creeps['upgraderSpecial'] === undefined && Game.time % 3000 < 300) {
+    // Threat evaluation for Room1
+    const isTargetRoomSafe = Game.rooms['W66S39'].find(FIND_HOSTILE_CREEPS).length <= 0;
+    if(isTargetRoomSafe) {
+      const initMemory = {
+        version: 3,
+        role: 'upgrader',
+        birth: 'W66S41',
+        home: 'W66S39',
+        duty: 'W66S39',
+        working: false,
+        state: 'idle',
+      };
+      Game.spawns['Home3'].createCreep([WORK,CARRY,MOVE,MOVE], 'upgraderSpecial', initMemory);
+    }
+  }
+
+  if(false && Game.creeps['builderSpecial'] === undefined && Game.time % 1500 < 300) {
+    // Threat evaluation for Room1
+    const isTargetRoomSafe = Game.rooms['W66S39'].find(FIND_HOSTILE_CREEPS).length <= 0;
+    if(isTargetRoomSafe) {
+      const initMemory = {
+        version: 3,
+        role: 'builder',
+        birth: 'W66S41',
+        home: 'W66S39',
+        duty: 'W66S39',
+        working: false,
+        state: 'idle',
+      };
+      Game.spawns['Home3'].createCreep([WORK,CARRY,MOVE,MOVE], 'builderSpecial', initMemory);
+    }
+  }
+}
+
 /* Get ramaining GCL points */
 function getRemainingGCL() {
   return Game.gcl.progressTotal - Game.gcl.progress;

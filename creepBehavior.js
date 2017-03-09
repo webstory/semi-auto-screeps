@@ -149,7 +149,7 @@ function harvest(creep) {
   const status = creep.harvest(target);
 
   switch(status) {
-    case OK: creep.memory.affinityTime = 100; return status;
+    case OK: creep.memory.affinityTime = 10; return status;
     case ERR_NOT_IN_RANGE: return creep.moveTo(source, {reusePath:15});
     case ERR_INVALID_TARGET: ctx.target = null; return status;
     case ERR_FULL: ctx.target = null; return status;
@@ -633,11 +633,8 @@ const role = {
       const range = creep.pos.getRangeTo(enemy);
 
       if(range < 4) {
-        if(creep.room.controller && creep.room.controller.my == true) {
-          return creep.moveTo(creep.room.controller, {reusePath:30});
-        } else {
-          return creep.moveTo(new RoomPosition(25, 25, ctx.home), {reusePath:30});
-        }
+        const panicRoomPos = Memory.room[ctx.home].panicRoom || [25,25];
+        return creep.moveTo(new RoomPosition(panicRoomPos[0], panicRoomPos[1], ctx.home), {reusePath:30});
       }
     }
 
@@ -812,7 +809,8 @@ const role = {
     const enemies = creep.room.find(FIND_HOSTILE_CREEPS);
 
     if(enemies.length > 0) {
-      return creep.moveTo(new RoomPosition(25, 25, ctx.home), {reusePath:30});
+        const panicRoomPos = Memory.room[ctx.home].panicRoom || [25,25];
+        return creep.moveTo(new RoomPosition(panicRoomPos[0], panicRoomPos[1], ctx.home), {reusePath:30});
     }
 
     ctx.working = canWork(creep);
@@ -850,9 +848,8 @@ const role = {
       const range = creep.pos.getRangeTo(enemy);
 
       if(range < 8) {
-
-        //const status = creep.attack(enemy);
-        return creep.moveTo(new RoomPosition(25, 25, ctx.home), {reusePath:30});
+        const panicRoomPos = Memory.room[ctx.home].panicRoom || [25,25];
+        return creep.moveTo(new RoomPosition(panicRoomPos[0], panicRoomPos[1], ctx.home), {reusePath:30});
       }
     }
 

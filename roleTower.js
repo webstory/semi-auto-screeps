@@ -32,11 +32,13 @@ module.exports = {
       return tower.repair(walls[0]);
     }
 
-    // Priority 3: Attack any hostile
+    // Priority 3: Attack any hostile within 10 range
     const enemies = tower.room.find(FIND_HOSTILE_CREEPS, {
       filter: (c) => (
-        (c.owner.username != '_Invader' && ev(c) > 0) ||
-        (c.hits < 100)
+        (tower.pos.inRangeTo(c, 10) &&
+          (c.owner.username != '_Invader' && ev(c) > 0) ||
+          (c.hits <= 100)
+        )
       )
     }).sort((a,b) => ev(b) - ev(a));
     if(enemies.length > 0) {

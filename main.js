@@ -118,24 +118,6 @@ module.exports.loop = () => {
     roleSpawn.run(Game.spawns[spawnName]);
   });
 
-  // Special spawn logic
-  if(Game.creeps['upgraderSpecial'] === undefined && Game.time % 3000 < 300) {
-    // Threat evaluation for Room1
-    const isTargetRoomSafe = Game.rooms['W66S39'].find(FIND_HOSTILE_CREEPS).length <= 0;
-    if(isTargetRoomSafe) {
-      const initMemory = {
-        version: 3,
-        role: 'upgrader',
-        birth: 'W66S41',
-        home: 'W66S39',
-        duty: 'W66S39',
-        working: false,
-        state: 'idle',
-      };
-      Game.spawns['Home3'].createCreep([WORK,CARRY,MOVE,MOVE], 'upgraderSpecial', initMemory);
-    }
-  }
-
   for(let name in Game.creeps) {
     if(Game.cpu.getUsed() >= Game.cpu.tickLimit) {
       console.log("CPU limit reached.");
