@@ -67,7 +67,7 @@ module.exports = {
 
     const plan = spawnPlan[spawn.name];
     if(!plan) {
-      console.error("Plan for "+spawn.name+" is not defined.");
+      console.log("Plan for "+spawn.name+" is not defined.");
       return false;
     }
 
