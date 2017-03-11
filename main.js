@@ -14,7 +14,7 @@ global.spawnSettler1 = () => {
     role: 'settler',
     birth: spawn.room.name,
     home: spawn.room.name,
-    duty: 'W67S41',
+    duty: 'W63S41',
     working: false,
     state: 'idle',
   };
@@ -29,7 +29,7 @@ global.spawnSettler2 = () => {
     role: 'settler',
     birth: spawn.room.name,
     home: spawn.room.name,
-    duty: 'W67S41',
+    duty: 'W63S41',
     working: false,
     state: 'idle',
   };

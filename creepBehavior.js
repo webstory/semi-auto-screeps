@@ -903,7 +903,7 @@ const role = {
     }
 
     // Step 3: Conquer Neutral room
-    if(creep.getActiveBodyparts(CLAIM) >= 1 && creep.room.controller.my == false) {
+    if(creep.getActiveBodyparts(CLAIM) >= 1 && creep.room.controller.my != true) {
       if(creep.pos.isNearTo(creep.room.controller)) {
         return creep.claimController(creep.room.controller);
         //return creep.reserveController(creep.room.controller);
