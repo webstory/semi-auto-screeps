@@ -273,6 +273,41 @@ function doBuild(creep, noRepair) {
 // Collector actions
 ////////////////////
 function collect(creep) {
+  const ctx = creep.memory;
+  let status = ERR_INVALID_TARGET;
+
+  if(ctx.target) {
+    const target = Game.getObjectById(ctx.target);
+    if(!target || target.structureType == STRUCTURE_STORAGE) {
+      ctx.target = null;
+      return ERR_INVALID_TARGET;
+    }
+
+    if(target) {
+      if(!creep.pos.isNearTo(target)) {
+        return creep.moveTo(target, {reusePath:15});
+      }
+
+      const status = (() => {
+        switch(ctx.targetType) {
+          case 'container': return creep.withdraw(target, RESOURCE_ENERGY);
+          case 'drop': return creep.pickup(target);
+          default: return ERR_INVALID_TARGET;
+        }
+      })();
+
+      switch(status) {
+        case OK: return status;
+        case ERR_NOT_IN_RANGE: return creep.moveTo(target, {reusePath:15});
+        case ERR_FULL: ctx.target = null; return status;
+        case ERR_INVALID_TARGET: ctx.target = null; return status;
+
+        default: creep.say(sayStatus(status)); return status;
+      }
+    }
+  }
+
+  // Find target
   // Priority 1: Mining depot
   const containers = creep.room.find(FIND_STRUCTURES, {
     filter: (s) => {
@@ -285,39 +320,42 @@ function collect(creep) {
   }).sort((a,b) => (b.store[RESOURCE_ENERGY] - a.store[RESOURCE_ENERGY]));
 
   if(containers.length > 0) {
-    const source = containers[0];
-    const status = creep.withdraw(source, RESOURCE_ENERGY);
-
-    if(status == ERR_NOT_IN_RANGE) {
-      return creep.moveTo(source, {reusePath:15});
-    }
-
+    ctx.target = containers[0].id;
+    ctx.targetType = "container";
     return status;
   }
 
   // Priority 2: Dropped resource
   const drops = creep.room.find(FIND_DROPPED_ENERGY, {
-    filter: (o) => true
+    filter: (o) => creep.pos.getRangeTo(o) < 5
   });
 
   const drop = creep.pos.findClosestByRange(drops);
   if(drop) {
-    const status = creep.pickup(drop);
-    if(status == ERR_NOT_IN_RANGE) {
-      return creep.moveTo(drop, {reusePath:15});
-    }
-
+    ctx.target = drop.id;
+    ctx.targetType = "drop";
     return status;
   }
 
-
-  return ERR_INVALID_TARGET;
+  return status;
 }
 
 function deliverToStorage(creep) {
   const ctx = creep.memory;
   let status = ERR_INVALID_TARGET;
   let target = Game.getObjectById(ctx.target);
+
+  if(target && target.structureType == STRUCTURE_STORAGE) {
+    status = creep.transfer(target, RESOURCE_ENERGY);
+
+    switch(status) {
+      case OK: return status;
+      case ERR_NOT_IN_RANGE: return creep.moveTo(target, {reusePath:30});
+      case ERR_INVALID_TARGET: ctx.target = null; return status;
+      case ERR_NOT_ENOUGH_ENERGY: ctx.target = null; return status;
+      default: creep.say(sayStatus(status)); return status;
+    }
+  }
 
   const storages = creep.room.find(FIND_STRUCTURES, {
     filter: (s) => {
@@ -332,17 +370,8 @@ function deliverToStorage(creep) {
     target = creep.pos.findClosestByPath(storages);
     if(target) {
       ctx.target = target.id;
+      return status;
     }
-  }
-
-  status = creep.transfer(target, RESOURCE_ENERGY);
-
-  switch(status) {
-    case OK: return status;
-    case ERR_NOT_IN_RANGE: return creep.moveTo(target, {reusePath:30});
-    case ERR_INVALID_TARGET: ctx.target = null; return status;
-    case ERR_NOT_ENOUGH_ENERGY: ctx.target = null; return status;
-    default: creep.say(sayStatus(status)); return status;
   }
 }
 
@@ -962,6 +991,7 @@ const role = {
     const doorsInRoom = {
       'W66S41': [new RoomPosition(31, 35, 'W66S41')],
       'W69S42': [new RoomPosition(22, 35, 'W69S42')],
+      'W67S41': [new RoomPosition(6, 22, 'W69S42')],
     };
 
     const doors = doorsInRoom[ctx.home];

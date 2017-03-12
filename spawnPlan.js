@@ -17,13 +17,14 @@ const C = {
 const defaultGeneBank = {
   'harvester': [WORK,WORK,CARRY,MOVE,'/',WORK,WORK,'/',WORK,WORK],
   'upgrader': [WORK,CARRY,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,'/',
-               WORK,CARRY,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,'/',
-               WORK,CARRY,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK],
+               WORK,CARRY,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK,'/',
+               WORK,CARRY,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK],
   'builder': [WORK,WORK,CARRY,MOVE,'/',WORK,WORK,CARRY,MOVE],
   'wall_worker': [WORK,WORK,CARRY,MOVE,'/',CARRY,CARRY],
-  'collector': [MOVE,CARRY,CARRY,MOVE,'/',CARRY,CARRY],
-  'deployer': [MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,CARRY,CARRY],
-  'warrior': [TOUGH,MOVE,'/',TOUGH,ATTACK,ATTACK,MOVE,MOVE,MOVE],
+  'collector': [MOVE,CARRY,CARRY,MOVE,'/',CARRY,CARRY,'/',MOVE,MOVE,CARRY,CARRY],
+  'deployer': [MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,CARRY,CARRY,'/',
+               MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
+  'warrior': [MOVE,MOVE,MOVE,ATTACK,ATTACK,HEAL],
   'gatekeeper': [MOVE,MOVE,MOVE,MOVE,MOVE,
               MOVE,MOVE,MOVE,MOVE,MOVE, // + 500
               ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,
@@ -34,7 +35,8 @@ const defaultGeneBank = {
               ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,'/', // +400  = 2900
               ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,'/', // +400  = 3300
               ATTACK,ATTACK,ATTACK,ATTACK,ATTACK],    // +400  = 3700
-  'remote_harvester': [WORK,MOVE,CARRY,MOVE,'/',MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,'/',WORK,WORK,MOVE,MOVE],
+  'remote_harvester': [WORK,MOVE,CARRY,MOVE,'/',MOVE,CARRY,CARRY,'/',MOVE,MOVE,ATTACK,CARRY,CARRY,'/',
+                       WORK,WORK,MOVE,MOVE],
   'reserver': [MOVE,CLAIM],
 };
 
@@ -53,13 +55,15 @@ module.exports = {
     geneBank: defaultGeneBank,
 
     workplace: {
-      'remote_harvester': ['W66S42','W65S42','W67S42','W65S41'],
+      'remote_harvester': ['W66S42','W65S42','W67S42','W65S41',  'W61S41','W62S41','W61S41','W69S41'],
       'remote_collector': ['W66S42','W65S42','W67S42','W65S41'],
       'reserver': ['W66S42','W65S42','W67S42','W65S41'],
     },
 
-    keep: [[C.H,C.H,C.U,C.B,C.U,C.D,C.D,C.C],
-           [C.RH,C.RH,C.RH,C.RH, C.RH,C.RH,C.RH,C.RH]]
+    keep: [[C.H,C.H,C.U,C.B,C.D,C.D,C.C],
+           [C.RH,C.RH,C.RH,C.RH, C.RH,C.RH,C.RH,C.RH],
+           [C.RH,C.RH,C.RH,C.RH],
+           ]
   },
 
   /*************************************************************************************/
@@ -72,7 +76,7 @@ module.exports = {
       'reserver': ['W69S43'],
     },
 
-    keep: [[C.H,C.H,C.U,C.B,C.B,C.U,C.D,C.C,C.D],
+    keep: [[C.H,C.H,C.U,C.B,C.B,C.D,C.C,C.D],
            [C.RH,C.RH,C.RH,C.RH,C.RH]]
   },
 
@@ -86,7 +90,7 @@ module.exports = {
       'reserver': ['W68S41'],
     },
 
-    keep: [[C.H,C.H,C.U,C.B,C.D,C.U,C.B,C.C,C.C,C.D],
+    keep: [[C.H,C.H,C.U,C.B,C.D,C.B,C.C,C.C,C.D],
            [C.RH,C.RH]]
   },
 
@@ -101,7 +105,7 @@ module.exports = {
       'reserver': ['W64S41'],
     },
 
-    keep: [[C.H,C.U,C.B,C.D],
+    keep: [[C.H,C.U,C.B,C.D,C.B],
            [C.RH,C.RH]]
   },
 
