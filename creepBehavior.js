@@ -1,5 +1,14 @@
 'use strict';
 
+function ev(c) {
+  return (
+    c.getActiveBodyparts(WORK) * 100 +
+    c.getActiveBodyparts(RANGED_ATTACK) * 150 +
+    c.getActiveBodyparts(ATTACK) * 80 +
+    c.getActiveBodyparts(HEAL) * 0
+  );
+}
+
 /**
  * Common actions
  */
@@ -838,8 +847,17 @@ const role = {
     const enemies = creep.room.find(FIND_HOSTILE_CREEPS);
 
     if(enemies.length > 0) {
+      if(creep.getActiveBodyparts(ATTACK) + creep.getActiveBodyparts(RANGED_ATTACK) >= 1) {
+        const target = creep.pos.findClosestByPath(enemies);
+        creep.moveTo(target);
+        creep.attack(target);
+        creep.rangedAttack(target);
+
+        return OK;
+      } else {
         const panicRoomPos = Memory.room[ctx.home].panicRoom || [25,25];
         return creep.moveTo(new RoomPosition(panicRoomPos[0], panicRoomPos[1], ctx.home), {reusePath:30});
+      }
     }
 
     ctx.working = canWork(creep);
