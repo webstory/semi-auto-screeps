@@ -849,11 +849,13 @@ const role = {
     if(enemies.length > 0) {
       if(creep.getActiveBodyparts(ATTACK) + creep.getActiveBodyparts(RANGED_ATTACK) >= 1) {
         const target = creep.pos.findClosestByPath(enemies);
-        creep.moveTo(target);
-        creep.attack(target);
-        creep.rangedAttack(target);
+        if(creep.pos.inRangeTo(target, 5)) {
+          creep.moveTo(target);
+          creep.attack(target);
+          creep.rangedAttack(target);
 
-        return OK;
+          return OK;
+        }
       } else {
         const panicRoomPos = Memory.room[ctx.home].panicRoom || [25,25];
         return creep.moveTo(new RoomPosition(panicRoomPos[0], panicRoomPos[1], ctx.home), {reusePath:30});

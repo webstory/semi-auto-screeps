@@ -17,7 +17,6 @@ const C = {
 const defaultGeneBank = {
   'harvester': [WORK,WORK,CARRY,MOVE,'/',WORK,WORK,'/',WORK,WORK],
   'upgrader': [WORK,CARRY,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,'/',
-               WORK,CARRY,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK,'/',
                WORK,CARRY,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK],
   'builder': [WORK,WORK,CARRY,MOVE,'/',WORK,WORK,CARRY,MOVE],
   'wall_worker': [WORK,WORK,CARRY,MOVE,'/',CARRY,CARRY],
@@ -55,14 +54,13 @@ module.exports = {
     geneBank: defaultGeneBank,
 
     workplace: {
-      'remote_harvester': ['W66S42','W65S42','W67S42','W65S41',  'W61S41','W62S41','W61S41','W69S41'],
+      'remote_harvester': ['W66S42','W65S42','W67S42','W65S41'],
       'remote_collector': ['W66S42','W65S42','W67S42','W65S41'],
       'reserver': ['W66S42','W65S42','W67S42','W65S41'],
     },
 
     keep: [[C.H,C.H,C.U,C.B,C.D,C.D,C.C],
-           [C.RH,C.RH,C.RH,C.RH, C.RH,C.RH,C.RH,C.RH],
-           [C.RH,C.RH,C.RH,C.RH],
+           [C.RH,C.RH,C.RH,C.RH, C.RH,C.RH,C.RH,C.RH]
            ]
   },
 
@@ -76,7 +74,7 @@ module.exports = {
       'reserver': ['W69S43'],
     },
 
-    keep: [[C.H,C.H,C.U,C.B,C.B,C.D,C.C,C.D],
+    keep: [[C.H,C.H,C.U,C.B,C.B,C.D,C.C,C.D,C.U],
            [C.RH,C.RH,C.RH,C.RH,C.RH]]
   },
 
@@ -105,8 +103,8 @@ module.exports = {
       'reserver': ['W64S41'],
     },
 
-    keep: [[C.H,C.U,C.B,C.D,C.B],
-           [C.RH,C.RH]]
+    keep: [[C.H,C.U,C.B,C.D,C.B,C.C],
+           [C.RH,C.RH,C.RH,C.RH,C.RH,C.RH,C.RH,C.RH,C.RH]]
   },
 
 }
