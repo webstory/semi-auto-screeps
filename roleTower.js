@@ -24,7 +24,7 @@ module.exports = {
     const walls = tower.room.find(FIND_STRUCTURES, {
       filter: (o) => (
         _.some([STRUCTURE_WALL, STRUCTURE_RAMPART], (t) => o.structureType == t) &&
-        o.hits < 512000
+        o.hits < 384000
       )
     }).sort((a,b) => a.hits - b.hits);
 

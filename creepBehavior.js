@@ -849,7 +849,7 @@ const role = {
     if(enemies.length > 0) {
       if(creep.getActiveBodyparts(ATTACK) + creep.getActiveBodyparts(RANGED_ATTACK) >= 1) {
         const target = creep.pos.findClosestByPath(enemies);
-        if(creep.pos.inRangeTo(target, 5)) {
+        if(target && creep.pos.inRangeTo(target, 5)) {
           creep.moveTo(target);
           creep.attack(target);
           creep.rangedAttack(target);
