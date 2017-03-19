@@ -23,7 +23,13 @@ const defaultGeneBank = {
   'collector': [MOVE,CARRY,CARRY,MOVE,'/',CARRY,CARRY,'/',MOVE,MOVE,CARRY,CARRY],
   'deployer': [MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,CARRY,CARRY,'/',
                MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
-  'warrior': [MOVE,MOVE,MOVE,ATTACK,ATTACK,HEAL],
+  'warrior': [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,'/',
+              MOVE,HEAL,'/',MOVE,HEAL,'/',MOVE,HEAL,'/',
+              MOVE,MOVE,MOVE,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,'/',
+              ATTACK,ATTACK,ATTACK,'/',MOVE,MOVE,MOVE,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,'/',
+              MOVE,HEAL,'/',MOVE,HEAL,'/',MOVE,MOVE,MOVE,'/',
+              ATTACK,ATTACK,ATTACK,'/',MOVE,MOVE,MOVE,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,'/',
+              ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE],
   'gatekeeper': [MOVE,MOVE,MOVE,MOVE,MOVE,
               MOVE,MOVE,MOVE,MOVE,MOVE, // + 500
               ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,
@@ -36,7 +42,7 @@ const defaultGeneBank = {
               ATTACK,ATTACK,ATTACK,ATTACK,ATTACK],    // +400  = 3700
   'remote_harvester': [WORK,MOVE,CARRY,MOVE,'/',MOVE,CARRY,CARRY,'/',MOVE,MOVE,ATTACK,CARRY,CARRY,'/',
                        WORK,WORK,MOVE,MOVE],
-  'reserver': [MOVE,CLAIM],
+  'reserver': [MOVE,CLAIM,'/',MOVE,CLAIM],
 };
 
 module.exports = {
@@ -69,13 +75,15 @@ module.exports = {
     geneBank: defaultGeneBank,
 
     workplace: {
-      'remote_harvester': ['W69S43','W68S42','W69S43','W68S42','W69S41'],
+      'remote_harvester': ['W69S43','W68S42','W69S43','W68S42','W69S41','W69S41','W69S43'],
       'remote_collector': ['W69S43'],
       'reserver': ['W69S43'],
     },
 
-    keep: [[C.H,C.H,C.U,C.B,C.B,C.D,C.C,C.D,C.U],
-           [C.RH,C.RH,C.RH,C.RH,C.RH]]
+    keep: [[C.H,C.H,C.U,C.B,C.B,C.D,C.C,C.D],
+           [C.RH,C.RH,C.RH,C.RH,C.RH,C.RH],
+           [C.U,C.B],
+           [C.RV,C.RH]]
   },
 
   /*************************************************************************************/
@@ -89,7 +97,9 @@ module.exports = {
     },
 
     keep: [[C.H,C.H,C.U,C.B,C.D,C.B,C.C,C.C,C.D],
-           [C.RH,C.RH]]
+           [C.RH,C.RH,C.RH,C.RH],
+           [C.U],
+           [C.RV,C.RH,C.RH]]
   },
 
 
@@ -103,7 +113,7 @@ module.exports = {
       'reserver': ['W64S41'],
     },
 
-    keep: [[C.H,C.U,C.B,C.D,C.B,C.C],
+    keep: [[C.H,C.U,C.B,C.D,C.B,C.C,C.D],
            [C.RH,C.RH,C.RH,C.RH,C.RH,C.RH,C.RH,C.RH,C.RH]]
   },
 

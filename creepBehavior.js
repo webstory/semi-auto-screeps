@@ -136,35 +136,49 @@ function recharge(creep) {
 ////////////////////
 function harvest(creep) {
   const ctx = creep.memory;
+  let target = null;
+  let status = ERR_INVALID_TARGET;
 
-  const sources = creep.room.find(FIND_SOURCES, {
-    filter: (s) => {
-      return (
-        (creep.pos.getRangeTo(s) < 2 && creep.memory.affinityTime > 0) ||
-        (s.pos.findInRange(FIND_MY_CREEPS, 1, {
-          filter: (c) => c.memory.role == 'harvester' && c.name != creep.name
-        }).length < 1)
-      );
+  if(ctx.target) {
+    target = Game.getObjectById(ctx.target);
+  }
+
+  if(target) {
+    if(creep.pos.isNearTo(target)) {
+      status = creep.harvest(target);
+
+      switch(status) {
+        case OK: return status;
+        case ERR_NOT_IN_RANGE: return creep.moveTo(source, {reusePath:15});
+        case ERR_INVALID_TARGET: ctx.target = null; return status;
+        case ERR_FULL: ctx.target = null; return status;
+        case ERR_NOT_ENOUGH_ENERGY: return status;
+        default: creep.say(sayStatus(status)); return status;
+      }
+    } else {
+      return creep.moveTo(target, {reusePath:15});
     }
-  });
+  }
 
-  const source = creep.pos.findClosestByPath(sources);
+  const findNearHarvesters = (s) => {
+    return s.pos.findInRange(FIND_MY_CREEPS, 1, {
+      filter: (c) => (c.memory.role == 'harvester' || c.memory.role == 'remote_harvester') && c.name != creep.name
+    }).length;
+  }
+
+  const sources = creep.room.find(FIND_SOURCES).sort((a,b) => findNearHarvesters(a) - findNearHarvesters(b));
+
+  if(sources.length <= 0 ) {
+    return ERR_INVALID_TARGET;
+  }
+
+  const source = sources[0];
 
   if(source) {
     ctx.target = source.id;
   }
 
-  const target = Game.getObjectById(ctx.target);
-  const status = creep.harvest(target);
-
-  switch(status) {
-    case OK: creep.memory.affinityTime = 10; return status;
-    case ERR_NOT_IN_RANGE: return creep.moveTo(source, {reusePath:15});
-    case ERR_INVALID_TARGET: ctx.target = null; return status;
-    case ERR_FULL: ctx.target = null; return status;
-    case ERR_NOT_ENOUGH_ENERGY: return status;
-    default: creep.say(sayStatus(status)); return status;
-  }
+  return status;
 }
 
 function chargeHarvester(creep) {
@@ -978,28 +992,76 @@ const role = {
   // WARRIOR
   warrior: (creep) => {
     const ctx = creep.memory;
-    ctx.working = canWork(creep);
+    let target = null;
+    let status = ERR_INVALID_TARGET;
 
-    const isOutside = creep.room.name != ctx.home;
+    // Priority 1: Heal or fallback if hurts a lot
+    if(creep.getActiveBodyparts(ATTACK) + creep.getActiveBodyparts(RANGED_ATTACK) <= 0) {
+      if(creep.getActiveBodyparts(HEAL) >= 1) {
+        return creep.heal(creep);
+      } else {
+        const healers = creep.room.find(FIND_MY_CREEPS, {
+          filter: (c) => c.getActiveBodyparts(HEAL)
+        });
 
+        const healer = creep.pos.findClosestByPath(healers);
+
+        if(healer) {
+          return creep.moveTo(healer);
+        }
+      }
+    }
+
+    // Priority 2: Attack enemy
     const enemies = creep.room.find(FIND_HOSTILE_CREEPS);
-
     if(enemies.length > 0) {
       const enemy = creep.pos.findClosestByPath(enemies);
-      return (creep.attack(enemy) == OK) ||
-             (creep.rangedAttack(enemy) == OK) ||
-             (creep.moveTo(enemy));
+
+      if(enemy) {
+        ctx.target = enemy.id;
+        ctx.targetType = 'enemy';
+        target = enemy;
+
+        creep.moveTo(target);
+        creep.attack(target);
+        status = creep.rangedAttack(target);
+
+        if(status != ERR_NOT_IN_RANGE) {
+          return OK;
+        }
+
+        // Go forward if enemy is near
+        if(creep.pos.inRangeTo(enemy, 10)) {
+          return ERR_NOT_IN_RANGE;
+        }
+      }
     }
 
-    if(creep.ticksToLive < 500) {
-      return creep.moveTo(creep.pos.findClosestByPath(FIND_MY_SPAWNS));
+    // Priority 3: Heal other
+    const wounded = creep.room.find(FIND_MY_CREEPS, {
+      filter: (c) => c.hits < c.hitsMax
+    });
+
+    if(wounded.length > 0) {
+      const patient = creep.pos.findClosestByPath(wounded);
+
+      if(patient) {
+        ctx.target = patient.id;
+        ctx.targetType = 'patient';
+        target = patient;
+
+        creep.moveTo(target);
+        creep.heal(target);
+        status = creep.rangedHeal(target);
+
+        if(status != ERR_NOT_IN_RANGE) {
+          return OK;
+        }
+      }
     }
 
-    if(creep.ticksToLive > 1000) {
-      return creep.moveTo(_.sample(creep.room.find(FIND_MY_STRUCTURES, {
-        filter: (o) => o.structureType == STRUCTURE_RAMPART
-      })));
-    }
+    // Priority 4: Wandering
+    return creep.move(_.sample([1,2,3,4,5,6,7,8]));
   },
 
   // GATEKEEPER
@@ -1015,10 +1077,14 @@ const role = {
     };
 
     const doors = doorsInRoom[ctx.home];
-    const target = doors[0];
+    let target = doors[0];
+
+    // Open room - No defence
+    if(!target) {
+      return role.warrior(creep);
+    }
 
     const inPosition = creep.pos.isEqualTo(target);
-
     const enemies = creep.room.find(FIND_HOSTILE_CREEPS);
     if(enemies.length > 0) {
       if(inPosition) {

@@ -80,8 +80,9 @@ module.exports = {
     const creepsCount = _.clone(Memory.room[spawn.room.name]['resident']);
     let curCreepCount = {};
 
-    // Treat evaluation
-    if(spawn.room.controller.safeMode == undefined && spawn.room.find(FIND_HOSTILE_CREEPS).length >= 3) {
+    // Treat evaluation - Gatekeeping
+    const enemies = spawn.room.find(FIND_HOSTILE_CREEPS);
+    if(spawn.room.controller.safeMode == undefined && enemies.length >= 3) {
       // Purge any non-mendatory spawns
       keepArray = keepArray.slice(0,1);
 
@@ -89,6 +90,18 @@ module.exports = {
       keepArray[0].push('gatekeeper');
       keepArray[0].push('deployer');
       keepArray[0].push('deployer');
+    }
+
+    // Treat evaluation - Creep Defender
+    const wounded = spawn.room.find(FIND_MY_CREEPS, {
+      filter: (c) => c.hits / c.hitsMax < 0.7
+    });
+
+    if(spawn.room.controller.safeMode == undefined && enemies.length >= 1 && wounded.length >= 1) {
+      // Append warriors
+      for(let i = 0; i < wounded.length; i++) {
+        keepArray[0].push('warrior');
+      }
     }
 
     const keep = _.flatten(keepArray);
