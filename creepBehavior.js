@@ -156,7 +156,16 @@ function harvest(creep) {
         default: creep.say(sayStatus(status)); return status;
       }
     } else {
-      return creep.moveTo(target, {reusePath:15});
+      status = creep.moveTo(target, {reusePath:15});
+
+      switch(status) {
+        case OK: return status;
+        case ERR_NOT_IN_RANGE: return status;
+        case ERR_INVALID_TARGET: ctx.target = null; return status;
+        case ERR_NO_PATH: ctx.target = null; return status;
+        case ERR_TIRED: return status;
+        default: creep.say(sayStatus(status)); return status;
+      }
     }
   }
 
@@ -860,7 +869,7 @@ const role = {
     const ctx = creep.memory;
     const enemies = creep.room.find(FIND_HOSTILE_CREEPS);
 
-    if(enemies.length > 0) {
+    if(enemies.length > 0 && creep.hits < creep.hitsMax) {
       if(creep.getActiveBodyparts(ATTACK) + creep.getActiveBodyparts(RANGED_ATTACK) >= 1) {
         const target = creep.pos.findClosestByPath(enemies);
         if(target && creep.pos.inRangeTo(target, 5)) {
