@@ -143,7 +143,7 @@ function harvest(creep) {
     target = Game.getObjectById(ctx.target);
   }
 
-  if(target) {
+  if(target && _.isNumber(target.energyCapacity)) {
     if(creep.pos.isNearTo(target)) {
       status = creep.harvest(target);
 
