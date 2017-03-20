@@ -20,11 +20,11 @@ module.exports = {
 
     if(patients.length > 0) { return tower.heal(patients[0]); }
 
-    // Priority 2: Repair weaken barricade
+    // Priority 2: Repair weaken barricade(DISABLED)
     const walls = tower.room.find(FIND_STRUCTURES, {
       filter: (o) => (
         _.some([STRUCTURE_WALL, STRUCTURE_RAMPART], (t) => o.structureType == t) &&
-        o.hits < 384000
+        o.hits < 0.384000
       )
     }).sort((a,b) => a.hits - b.hits);
 

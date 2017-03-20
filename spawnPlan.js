@@ -82,7 +82,7 @@ module.exports = {
 
     keep: [[C.H,C.H,C.U,C.B,C.B,C.D,C.C,C.D],
            [C.RH,C.RH,C.RH,C.RH,C.RH,C.RH],
-           [C.U,C.B],
+           [C.B],
            [C.RV,C.RH]]
   },
 
@@ -98,7 +98,6 @@ module.exports = {
 
     keep: [[C.H,C.H,C.U,C.B,C.D,C.B,C.C,C.C,C.D],
            [C.RH,C.RH,C.RH,C.RH],
-           [C.U],
            [C.RV]]
   },
 
