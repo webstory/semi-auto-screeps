@@ -152,7 +152,7 @@ function harvest(creep) {
         case ERR_NOT_IN_RANGE: return creep.moveTo(source, {reusePath:15});
         case ERR_INVALID_TARGET: ctx.target = null; return status;
         case ERR_FULL: ctx.target = null; return status;
-        case ERR_NOT_ENOUGH_ENERGY: return status;
+        case ERR_NOT_ENOUGH_ENERGY: ctx.target = null; return status;
         default: creep.say(sayStatus(status)); return status;
       }
     } else {
@@ -175,7 +175,8 @@ function harvest(creep) {
     }).length;
   }
 
-  const sources = creep.room.find(FIND_SOURCES).sort((a,b) => findNearHarvesters(a) - findNearHarvesters(b));
+  //const sources = creep.room.find(FIND_SOURCES).sort((a,b) => findNearHarvesters(a) - findNearHarvesters(b));
+  const sources = creep.room.find(FIND_SOURCES).sort((a,b) => b.energy - a.energy);
 
   if(sources.length <= 0 ) {
     return ERR_INVALID_TARGET;

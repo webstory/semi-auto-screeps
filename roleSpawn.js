@@ -94,7 +94,7 @@ module.exports = {
 
     // Treat evaluation - Creep Defender
     const wounded = spawn.room.find(FIND_MY_CREEPS, {
-      filter: (c) => c.hits / c.hitsMax < 0.7
+      filter: (c) => c.hits / c.hitsMax < 0.4
     });
 
     if(spawn.room.controller.safeMode == undefined && enemies.length >= 1 && wounded.length >= 1) {

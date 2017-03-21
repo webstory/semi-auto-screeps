@@ -16,20 +16,17 @@ const C = {
 
 const defaultGeneBank = {
   'harvester': [WORK,WORK,CARRY,MOVE,'/',WORK,WORK,'/',WORK,WORK],
-  'upgrader': [WORK,CARRY,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,'/',
-               WORK,CARRY,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK,MOVE,WORK,WORK],
+  'upgrader': [WORK,CARRY,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,MOVE,'/',WORK,WORK,'/'],
   'builder': [WORK,WORK,CARRY,MOVE,'/',WORK,WORK,CARRY,MOVE],
   'wall_worker': [WORK,WORK,CARRY,MOVE,'/',CARRY,CARRY],
   'collector': [MOVE,CARRY,CARRY,MOVE,'/',CARRY,CARRY,'/',MOVE,MOVE,CARRY,CARRY],
   'deployer': [MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,'/',MOVE,CARRY,CARRY,CARRY,CARRY,'/',
                MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
-  'warrior': [MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,'/',
-              MOVE,HEAL,'/',MOVE,HEAL,'/',MOVE,HEAL,'/',
-              MOVE,MOVE,MOVE,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,'/',
-              ATTACK,ATTACK,ATTACK,'/',MOVE,MOVE,MOVE,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,'/',
-              MOVE,HEAL,'/',MOVE,HEAL,'/',MOVE,MOVE,MOVE,'/',
-              ATTACK,ATTACK,ATTACK,'/',MOVE,MOVE,MOVE,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,'/',
-              ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE],
+  'warrior': [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,
+              ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,
+              RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,RANGED_ATTACK,
+              MOVE,MOVE,MOVE,MOVE,MOVE,
+              HEAL,HEAL,HEAL,HEAL,HEAL],
   'gatekeeper': [MOVE,MOVE,MOVE,MOVE,MOVE,
               MOVE,MOVE,MOVE,MOVE,MOVE, // + 500
               ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,
@@ -57,7 +54,9 @@ module.exports = {
 
   /*************************************************************************************/
   'Home3': {
-    geneBank: defaultGeneBank,
+    geneBank: Object.assign({}, defaultGeneBank, {
+
+    }),
 
     workplace: {
       'remote_harvester': ['W66S42','W65S42','W67S42','W65S41'],
@@ -72,7 +71,9 @@ module.exports = {
 
   /*************************************************************************************/
   'Home4': {
-    geneBank: defaultGeneBank,
+    geneBank: Object.assign({}, defaultGeneBank, {
+
+    }),
 
     workplace: {
       'remote_harvester': ['W69S43','W68S42','W69S43','W68S42','W69S41','W69S41','W69S43'],
@@ -82,13 +83,14 @@ module.exports = {
 
     keep: [[C.H,C.H,C.U,C.B,C.B,C.D,C.C,C.D],
            [C.RH,C.RH,C.RH,C.RH,C.RH,C.RH],
-           [C.B],
            [C.RV,C.RH]]
   },
 
   /*************************************************************************************/
   'Home5': {
-    geneBank: defaultGeneBank,
+    geneBank: Object.assign({}, defaultGeneBank, {
+
+    }),
 
     workplace: {
       'remote_harvester': ['W68S41'],
@@ -104,7 +106,9 @@ module.exports = {
 
   /*************************************************************************************/
   'Home6': {
-    geneBank: defaultGeneBank,
+    geneBank: Object.assign({}, defaultGeneBank, {
+
+    }),
 
     workplace: {
       'remote_harvester': ['W61S41','W64S42','W64S41','W64S41','W64S42','W64S42','W62S41','W62S41','W61S41'],
